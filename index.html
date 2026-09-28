@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <!-- Tipografía Fredoka: Gruesa, moderna y muy legible en streaming -->
+  <!-- Tipografía Fredoka: Gruesa, moderna y ultra legible en streaming -->
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@700;900&display=swap" rel="stylesheet">
 
   <style>
@@ -21,42 +21,47 @@
       height: 100vh;
       display: flex;
       align-items: center;
+      justify-content: center;
     }
 
-    /* Padding vertical amplio para que las sombras no se corten */
-    .ticker-container {
+    .container {
       width: 100vw;
-      overflow: hidden;
-      background: transparent;
-      padding: 25px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
     }
 
-    .ticker-track {
-      display: inline-flex;
-      will-change: transform;
-      transform: translate3d(0, 0, 0);
+    /* Columna Vertical de 3 elementos (uno arriba del otro) */
+    .grid-3-vertical {
+      display: grid;
+      grid-template-columns: 1fr; /* 1 sola columna de ancho */
+      gap: 20px; /* Espacio vertical entre cada item */
+      justify-items: center;
+      align-items: center;
+      transition: opacity 0.5s ease-in-out, transform 0.5s ease-in-out;
+      opacity: 1;
+      transform: scale(1);
     }
 
-    .block {
-      display: inline-flex;
-      gap: 50px;
-      padding-right: 50px; /* Separación continua imperceptible */
+    .grid-3-vertical.oculto {
+      opacity: 0;
+      transform: scale(0.95);
     }
 
-    /* Tarjeta estilo Horizontal */
+    /* Tarjeta Horizontal (Icono a la izquierda, detalles a la derecha) */
     .item {
-      display: inline-flex;
+      display: flex;
       flex-direction: row;
       align-items: center;
       justify-content: flex-start;
-      flex-shrink: 0;
-      gap: 14px;
+      width: 360px;
+      gap: 16px;
     }
 
     /* Icono del Regalo (Izquierda) */
     .item .img-box {
-      width: 90px;
-      height: 90px;
+      width: 100px;
+      height: 100px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -67,7 +72,7 @@
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0px 4px 8px rgba(0, 0, 0, 0.85));
+      filter: drop-shadow(0px 8px 14px rgba(0, 0, 0, 0.9));
     }
 
     /* Contenedor de Detalles (Derecha) */
@@ -78,7 +83,7 @@
       justify-content: center;
     }
 
-    /* 1. Nombre del regalo (Arriba - Blanco) */
+    /* 1. Nombre del regalo (Arriba - Blanco Grande) */
     .item .titulo {
       color: #ffffff;
       font-weight: 900;
@@ -91,13 +96,12 @@
        -2px -2px 0 #000,
         2px -2px 0 #000,
        -2px 2px 0 #000,
-        0px 3px 6px rgba(0, 0, 0, 0.9);
+        0px 4px 10px rgba(0, 0, 0, 0.95);
       text-align: left;
-      white-space: nowrap;
       margin-bottom: 2px;
     }
 
-    /* 2. Efecto / Descripción (Centro - Azul Aqua Diamante) */
+    /* 2. Efecto / Descripción (Centro - Azul Aqua Grande) */
     .item .subtitulo {
       color: #00f2fe;
       font-weight: 900;
@@ -110,13 +114,12 @@
        -2px -2px 0 #000,
         2px -2px 0 #000,
        -2px 2px 0 #000,
-        0px 3px 6px rgba(0, 0, 0, 0.9);
+        0px 4px 10px rgba(0, 0, 0, 0.95);
       text-align: left;
-      white-space: nowrap;
       margin-bottom: 4px;
     }
 
-    /* 3. Contenedor de Moneda y Precio (Abajo - Dorado Grande) */
+    /* 3. Contenedor de Moneda y Precio (Abajo - Dorado Destacado) */
     .item .precio-box {
       display: flex;
       align-items: center;
@@ -127,7 +130,7 @@
       width: 26px;
       height: 26px;
       object-fit: contain;
-      filter: drop-shadow(0px 2px 4px rgba(0, 0, 0, 0.8));
+      filter: drop-shadow(0px 3px 6px rgba(0, 0, 0, 0.9));
     }
 
     .item .precio-box span {
@@ -141,24 +144,21 @@
        -2px -2px 0 #000,
         2px -2px 0 #000,
        -2px 2px 0 #000,
-        0px 3px 6px rgba(0, 0, 0, 0.9);
+        0px 4px 10px rgba(0, 0, 0, 0.95);
     }
   </style>
 </head>
 <body>
 
-  <div class="ticker-container">
-    <div class="ticker-track" id="track">
-      <div class="block" id="block1"></div>
-      <div class="block" id="block2"></div>
-    </div>
+  <div class="container">
+    <div class="grid-3-vertical" id="contenedor"></div>
   </div>
 
   <script>
     // TUS 17 REGALOS EXTRAÍDOS DEL ARCHIVO PROPORCIONADO
     const regalos = [
-      { archivo: "regalos/Rosa.png", nombre: "Rosa", descripcion: "x5 Zombis", monedas: 1 },
-      { archivo: "regalos/Fuegos Artificiales.png", nombre: "fuegos artificiales", descripcion: "luz roja luz verde", monedas: 5 },
+      { archivo: "regalos/rosa.png", nombre: "Rosa", descripcion: "x5 Zombis", monedas: 1 },
+      { archivo: "regalos/fuegos artificiales.png", nombre: "fuegos artificiales", descripcion: "luz roja luz verde", monedas: 5 },
       { archivo: "regalos/GG.png", nombre: "GG", descripcion: "Perk Random", monedas: 1 },
       { archivo: "regalos/Helado.png", nombre: "Helado", descripcion: "Quitar un Perk", monedas: 1 },
       { archivo: "regalos/Corazon Coreano.png", nombre: "corazón Coreano", descripcion: "+1000 puntos", monedas: 5 },
@@ -176,52 +176,51 @@
       { archivo: "regalos/collar de amistad.png", nombre: "collar de amistad", descripcion: "Ruleta extrema", monedas: 10 }
     ];
 
-    const block1 = document.getElementById('block1');
-    const block2 = document.getElementById('block2');
-    const track = document.getElementById('track');
 
-    function crearHTML(lista) {
-      return lista.map(item => `
-        <div class="item">
-          <div class="img-box">
-            <img src="${encodeURI(item.archivo)}" alt="${item.nombre}">
-          </div>
-          <div class="info">
-            <span class="titulo">${item.nombre}</span>
-            <span class="subtitulo">${item.descripcion}</span>
-            <div class="precio-box">
-              <img src="regalos/moneda_tiktok.png" alt="moneda">
-              <span>${item.monedas}</span>
+    const contenedor = document.getElementById('contenedor');
+    let indiceActual = 0;
+    const tiempoVisibilidad = 6000;
+
+    function mostrarSiguienteGrupo() {
+      contenedor.classList.add('oculto');
+
+      setTimeout(() => {
+        let grupo = regalos.slice(indiceActual, indiceActual + 3);
+
+        if (grupo.length < 3) {
+          const faltantes = 3 - grupo.length;
+          const disponibles = regalos.filter(r => !grupo.includes(r));
+          const aleatorios = disponibles.sort(() => 0.5 - Math.random()).slice(0, faltantes);
+          grupo = [...grupo, ...aleatorios];
+        }
+
+        contenedor.innerHTML = grupo.map(item => `
+          <div class="item">
+            <div class="img-box">
+              <img src="${encodeURI(item.archivo)}" alt="Regalo">
+            </div>
+            <div class="info">
+              <span class="titulo">${item.nombre}</span>
+              <span class="subtitulo">${item.descripcion}</span>
+              <div class="precio-box">
+                <img src="regalos/moneda_tiktok.png" alt="moneda">
+                <span>${item.monedas}</span>
+              </div>
             </div>
           </div>
-        </div>
-      `).join('');
+        `).join('');
+
+        contenedor.classList.remove('oculto');
+
+        indiceActual += 3;
+        if (indiceActual >= regalos.length) {
+          indiceActual = 0;
+        }
+      }, 500);
     }
 
-    // Generar la lista y duplicarla para permitir el ciclo continuo sin pausas
-    const contenidoBase = crearHTML(regalos);
-    block1.innerHTML = contenidoBase;
-    block2.innerHTML = contenidoBase;
-
-    let posX = 0;
-    const velocidad = 1.2; // Puedes ajustar el valor para ir más rápido o despacio
-    let anchoBloque = 0;
-
-    function animar() {
-      posX -= velocidad;
-
-      if (Math.abs(posX) >= anchoBloque) {
-        posX = 0;
-      }
-
-      track.style.transform = `translate3d(${posX}px, 0, 0)`;
-      requestAnimationFrame(animar);
-    }
-
-    window.addEventListener('load', () => {
-      anchoBloque = block1.offsetWidth;
-      requestAnimationFrame(animar);
-    });
+    mostrarSiguienteGrupo();
+    setInterval(mostrarSiguienteGrupo, tiempoVisibilidad);
   </script>
 
 </body>
